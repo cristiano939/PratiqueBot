@@ -4,7 +4,10 @@
   "messageReceivers": [
     {
       "type": "PlainTextMessageReceiver",
-      "mediaType": "text/plain"
+      "mediaType": "text/plain",
+      "priority": 0,
+      "content": "(#comecar#|#comofunciona#|#atendente#)"
+     
     }
   ],
   "settings": {
@@ -13,3 +16,4 @@
   "startupType": "Startup",
   "schemaVersion": 2
 }
+//      AIzaSyAj0zH0MFBnL5oBpUt-SXeSgyCuoLi2caw                                   Google Static Map APIKey
