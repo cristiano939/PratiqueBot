@@ -13,6 +13,7 @@ using Lime.Messaging.Contents;
 using PratiqueBot.Factory;
 using PratiqueBot.Models;
 using System.Collections.Generic;
+using Takenet.MessagingHub.Client.Extensions.Bucket;
 
 namespace PratiqueBot
 {
@@ -21,13 +22,17 @@ namespace PratiqueBot
         private readonly IMessagingHubSender _sender;
         private readonly IDirectoryExtension _directory;
         private CommomExpressionsManager _expression;
+        private Settings _settings;
         private DocumentService _service;
+        private readonly IBucketExtension _bucket;
 
 
-        public PlainTextMessageReceiver(IMessagingHubSender sender, IDirectoryExtension directory)
+        public PlainTextMessageReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings)
         {
             _sender = sender;
             _directory = directory;
+            _bucket = bucket;
+            _settings = settings;
             _expression = new CommomExpressionsManager();
             _service = new DocumentService();
 
@@ -41,26 +46,37 @@ namespace PratiqueBot
             Trace.TraceInformation($"From: {message.From} \tContent: {message.Content}");
             Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
 
-            if (_expression.IsFirstMessage(input))
+            if (await IsBotActive(message.From))
             {
-                await _sender.SendMessageAsync(GreetingsFirstMessage(account, input), message.From, cancellationToken);
-                cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 4));
-                await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
+                if (_expression.IsFirstMessage(input))
+                {
+                    await _sender.SendMessageAsync(GreetingsFirstMessage(account, input), message.From, cancellationToken);
+                    cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 4));
+                    await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
 
+                }
+                else if (input.Contains("#comofunciona#"))
+                {
+                    await _sender.SendMessageAsync(CreateDoubtsCarrossel(), message.From, cancellationToken);
+                }
+                else if (input.Contains("#comecar#"))
+                {
+                    await _sender.SendMessageAsync(FirstMenu(account), message.From, cancellationToken);
+                }
+                else if (input.Contains("#atendente#"))
+                {
+                    await CommandSuspendBot(message.From, cancellationToken);
+                }
+                
+                else
+                {
+                    await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
+                }
             }
-            else if (input.Contains("#comofunciona#"))
+            else if (input.Contains("#VOLTA"))
             {
-                await _sender.SendMessageAsync(CreateDoubtsCarrossel(), message.From, cancellationToken);
+                await CommandActivateBot(message.From, account, cancellationToken);
             }
-            else if (input.Contains("#comecar#"))
-            {
-                await _sender.SendMessageAsync(FirstMenu(account), message.From, cancellationToken);
-            }
-            else
-            {
-                await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
-            }
-
 
         }
 
@@ -93,6 +109,68 @@ namespace PratiqueBot
             return select;
         }
 
+        private async Task CommandSuspendBot(Node from, CancellationToken cancellationToken)
+        {
+            try
+            {
+                //TIPO 1
+                IDictionary<string, object> contentSuspend = new Dictionary<string, object>();
+                contentSuspend.Add("suspend", "true");
+                var jsonDocSuspend = new JsonDocument(contentSuspend, new MediaType("application", "json"));
+
+                await _bucket.SetAsync<JsonDocument>(from.ToString() + _settings.BotIdentifier+"_suspended", jsonDocSuspend, new TimeSpan(0, 30, 0));
+
+                Select select = new Select() { Text = "O Pratique Digital aproveitou a folga para malhar, 💪\n\nem breve um atendente deve entrar em contato, por favor aguarde.\n\nPara falar novamente com o Pratique Digital envie #VOLTA" };
+                SelectOption[] option = new SelectOption[1];
+                option[0] = new SelectOption() { Text = "💙 VOLTA DIGITAL", Value = new PlainText { Text = "#VOLTA" } };
+                select.Options = option;
+
+                await _sender.SendMessageAsync(select, from, cancellationToken);
+                cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 1));
+                await _sender.SendMessageAsync("Deixe sua mensagem que em breve responderemos.", from, cancellationToken);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private async Task CommandActivateBot(Node from, Account account, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _bucket.DeleteAsync(from.ToString() + _settings.BotIdentifier + "_suspended");
+                await _sender.SendMessageAsync(new PlainText { Text = string.Format("Terminei minha ficha agora,😅\nvoltei para atender você {0}.", account.FullName.Split(' ')[0]) }, from);
+                cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
+                await _sender.SendMessageAsync(FirstMenu(account), from);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private async Task<bool> IsBotActive(Node from)
+        {
+            try
+            {
+                var data = await _bucket.GetAsync<JsonDocument>(from.ToString() + _settings.BotIdentifier+ "_suspended");
+
+                if (data != null)
+                {
+                    return false;
+                }
+                else return true;
+
+            }
+            catch
+            {
+                return true;
+            }
+
+        }
+
         public Document FirstMenu(Account account)
         {
             string initialMessage = string.Format("Sobre o que deseja saber?", account.FullName.Split(' ')[0]);
@@ -122,5 +200,7 @@ namespace PratiqueBot
             Document carrossel = _service.CreateCarrossel(cards);
             return carrossel;
         }
+
+
     }
 }

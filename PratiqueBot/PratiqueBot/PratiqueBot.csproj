@@ -106,6 +106,7 @@
     <Compile Include="Receivers\PackagesPricesReceivers.cs" />
     <Compile Include="Receivers\SportsReceivers.cs" />
     <Compile Include="Receivers\UnitysReceivers.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
