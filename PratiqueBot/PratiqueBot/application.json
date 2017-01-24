@@ -13,7 +13,7 @@
       "type": "PackagesPricesReceivers",
       "mediaType": "text/plain",
       "priority": 0,
-      "content": "(?!)(#planospacotes#|#gold#|#silver#|#bronze#|#discount#|preços|precos|parcelas|pagar|ouro|prata|bronze|pacotes|reais|dilmas|temers|golpinhos|dolares)"
+      "content": "(!?)(#planospacotes#|#gold#|#silver#|#bronze#|#discount#|preços|precos|parcelas|pagar|ouro|prata|bronze|pacotes|reais|dilmas|temers|golpinhos|dolares)"
      
     }
   ],
