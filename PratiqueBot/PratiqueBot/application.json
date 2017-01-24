@@ -1,0 +1,15 @@
+﻿{
+  "identifier": "pratiquebot",
+  "accessKey": "Nk5nbTdkZVhQTHpNSXFnZ211WFE=",
+  "messageReceivers": [
+    {
+      "type": "PlainTextMessageReceiver",
+      "mediaType": "text/plain"
+    }
+  ],
+  "settings": {
+    "setting1": "value1"
+  },
+  "startupType": "Startup",
+  "schemaVersion": 2
+}
