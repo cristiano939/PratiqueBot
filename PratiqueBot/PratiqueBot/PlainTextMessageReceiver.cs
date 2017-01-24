@@ -67,7 +67,11 @@ namespace PratiqueBot
                 {
                     await CommandSuspendBot(message.From, cancellationToken);
                 }
-                
+                else if (input.Contains("#encerrar#"))
+                {
+                    await _sender.SendMessageAsync(new PlainText {Text= "Foi um prazer poder te ajudar 😉\n\nQuando precisar de mim novamente,\n só chamar!" },message.From,cancellationToken);
+                }
+
                 else
                 {
                     await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
@@ -183,7 +187,7 @@ namespace PratiqueBot
                 new SelectOption { Text = "Unidades", Value = "#unidades#" },
                 new SelectOption { Text = "Rede Saude", Value = "#redesaude#" },
                 new SelectOption { Text = "Planos e Pacotes", Value = "#planospacotes#" },
-                new SelectOption { Text = "Atendimento", Value = "#atendente#" }}
+                new SelectOption { Text = "Falar com atendente", Value = "#atendente#" }}
             };
             return select;
         }
@@ -196,7 +200,7 @@ namespace PratiqueBot
             cards.Add(new CarrosselCard { CardContent = "Encontre a unidade mais proxima de onde estiver. Basta enviar sua localização", CardMediaHeader = new MediaLink { Text = "Encontre a unidade mais proxima de onde estiver. Basta enviar sua localização", Uri = new Uri("https://maps.googleapis.com/maps/api/staticmap?center=-19.8838096,-43.9409045&markers=color:red%7Clabel:C%7C-19.8838096,-43.9409045&zoom=15&size=600x300&maptype=roadmap&key=AIzaSyAj0zH0MFBnL5oBpUt-SXeSgyCuoLi2caw"), Title = "Encontre a unidade mais próxima", Type = new MediaType("image", "jpeg") }, options = new List<CarrosselOptions>() });
             cards.Add(new CarrosselCard { CardContent = "Indique amigos e familiares e aumente sua Rede Saúde. Ganhe créditos e dinheiro", CardMediaHeader = new MediaLink { Text = "Indique amigos e familiares e aumente sua Rede Saúde. Ganhe créditos e dinheiro", Uri = new Uri("https://s23.postimg.org/p67gvh9wr/rede_saude.png"), Title = "Rede Saúde", Type = new MediaType("image", "jpeg") }, options = new List<CarrosselOptions>() });
             cards.Add(new CarrosselCard { CardContent = "Veja nossos planos e escolha o melhor para seu tempo, corpo e bolso.", CardMediaHeader = new MediaLink { Text = "Veja nossos planos e escolha o melhor para seu tempo, corpo e bolso.", Uri = new Uri("https://s23.postimg.org/8nuvygvy3/pacotes.png"), Title = "Pacotes e Preços", Type = new MediaType("image", "jpeg") }, options = new List<CarrosselOptions>() });
-            cards.Add(new CarrosselCard { CardContent = "Podemos começar, ou quer falar com um atendente?", CardMediaHeader = new MediaLink { Text = "Podemos começar, ou quer falar com um atendente?", Uri = new Uri("https://s23.postimg.org/qetna6huz/pratique.jpg"), Title = "Começar", Type = new MediaType("image", "jpeg") }, options = new List<CarrosselOptions>() { new CarrosselOptions { label = "Começar", value = "#comecar#" }, new CarrosselOptions { label = "Atendente", value = "#atendente#" } } });
+            cards.Add(new CarrosselCard { CardContent = "Podemos começar, ou quer falar com um atendente?", CardMediaHeader = new MediaLink { Text = "Podemos começar, ou quer falar com um atendente?", Uri = new Uri("https://s23.postimg.org/qetna6huz/pratique.jpg"), Title = "Começar", Type = new MediaType("image", "jpeg") }, options = new List<CarrosselOptions>() { new CarrosselOptions { label = "Começar", value = "#comecar#" }, new CarrosselOptions { label = "Falar com atendente", value = "#atendente#" } } });
             Document carrossel = _service.CreateCarrossel(cards);
             return carrossel;
         }

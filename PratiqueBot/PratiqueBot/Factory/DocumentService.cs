@@ -72,6 +72,20 @@ namespace PratiqueBot.Factory
             return webLink;
         }
 
+        public Select CreateSimpleSelect(SelectScope scope, string text, List<string> options)
+        {
+            Select select = new Select { Scope = scope, Text = text };
+            SelectOption[] selectOptions = new SelectOption[options.Count];
+            int count = 0;
+            foreach (var option in options)
+            {
+                selectOptions[count] = new SelectOption { Text = options[count], Value = options[count] };
+                count++;
+            }
+            select.Options = selectOptions;
+            return select;
+        }
+
         public DocumentCollection CreateCarrossel(List<CarrosselCard> cards)
         {
             var docCollection = new DocumentCollection();
