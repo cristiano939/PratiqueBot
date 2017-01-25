@@ -8,10 +8,12 @@ namespace PratiqueBot.Models
 {
     public class Gym
     {
-        public string Name;
-        public string Address;
-        public List<string> Modalities;
-        public string Phone;
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public List<string> Modalities { get; set; }
+        public string Phone { get; set; }
+        public string latitude { get; set; }
+        public string longitude { get; set; }
 
     }
 }

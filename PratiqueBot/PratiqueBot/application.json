@@ -24,8 +24,67 @@
         "Name": "Cachoeirinha",
         "Address": "Av. Bernardo Vasconcelos | 1193 | Cachoeirinha ",
         "Phone": "(31) 3424-4245",
-        "Modalities": [ "Musculação","Spinning","Pilates","Natação","Hidroginástica","Muay-Thai","Taekwon Do","Boxe","Ritmo","Zumba","Personal"  ]
+        "latitude": "-19.8835684",
+        "longitude": "-43.9408845",
+        "Modalities": [ "Musculação", "Spinning", "Pilates", "Natação", "Hidroginástica", "Muay-Thai", "Taekwon Do", "Boxe", "Ritmo", "Zumba", "Personal" ]
+      },
+      {
+        "Name": "Unid. Guarani",
+        "Address": "Av. Saramenha | 1530 | Guarani |",
+        "Phone": "(31) 3433-2133",
+        "latitude": "-19.8438646",
+        "longitude": "-43.9186725",
+        "Modalities": [ "Musculação", "Spinning", "Pilates", "Natação", "Hidroginástica", "Muay-Thai", "Taekwon Do", "Boxe", "Ritmo",  "Personal" ]
+      },
+      {
+        "Name": "Sagrada Família",
+        "Address": "R. Conselheiro Lafaiete | 1416 | Sagrada Família ",
+        "Phone": "(31) 3047-2037",
+        "latitude": "-19.8997295",
+        "longitude": "-43.9232246",
+        "Modalities": [ "Musculação", "Spinning", "Pilates",  "Muay-Thai","Zumba", "Personal" ]
+      },
+      {
+        "Name": "Castelo",
+        "Address": "Av. dos Engenheiros | 167 | Castelo",
+        "Phone": "(31) 3646-4982",
+        "latitude": "-19.892277",
+        "longitude": "-43.9958554",
+        "Modalities": [ "Musculação", "Spinning", "Jiu Jitsu", "Muay-Thai", "Taekwon Do", "Boxe", "Ritmo", "Zumba", "Personal" ]
+      },
+      {
+        "Name": "Alípio de Melo",
+        "Address": "Av. Abílio Machado | 750 | Alípio de Melo",
+        "Phone": "(31) 3646-2771",
+        "latitude": "-19.9103808",
+        "longitude": "-43.9981809",
+        "Modalities": [ "Musculação", "Spinning", "Pilates", "Muay-Thai", "Taekwon Do", "Ritmo", "Zumba", "Personal" ]
+      },
+      {
+        "Name": "Céu Azul",
+        "Address": "Av. Antônio José dos Santos | 409 | Céu Azul ",
+        "Phone": "(31) 3646-2771",
+        "latitude": "-19.8217706",
+        "longitude": "-43.9971834",
+        "Modalities": [ "Musculação",  "Muay-Thai", "Taekwon Do", "Boxe",  "Zumba" ]
+      },
+      {
+        "Name": "Venda Nova",
+        "Address": "R. Cascalheiras | 145 | Venda Nova",
+        "Phone": "(31) 3327-0585",
+        "latitude": "-19.8149073",
+        "longitude": "-43.9561015",
+        "Modalities": [ "Musculação",  "Muay-Thai", "Boxe", "Zumba" ]
+      },
+      {
+        "Name": "São Benedito",
+        "Address": " Av. Brasília | 832 | São Benedito | Santa Luzia",
+        "Phone": "(31) 3637-7858",
+        "latitude": "-19.7936603",
+        "longitude": "-43.9364636",
+        "Modalities": [ "Musculação", "Spinning", "Pilates", "Muay-Thai", "Taekwon Do", "Zumba","Four Fit" ]
       }
+
 
 
     ]
