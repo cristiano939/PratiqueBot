@@ -11,5 +11,8 @@ namespace PratiqueBot
     {
         public string BotIdentifier { get; set; }
         public List<Gym> gyms { get; set; }
+       
+
+
     }
 }

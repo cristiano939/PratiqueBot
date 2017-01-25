@@ -14,6 +14,7 @@ namespace PratiqueBot.Models
         public string Phone { get; set; }
         public string latitude { get; set; }
         public string longitude { get; set; }
+        public string distance { get; set; }
 
     }
 }

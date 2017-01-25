@@ -6,19 +6,31 @@
       "type": "PlainTextMessageReceiver",
       "mediaType": "text/plain",
       "priority": 1
-      
-
     },
-     {
+    {
       "type": "PackagesPricesReceivers",
       "mediaType": "text/plain",
       "priority": 0,
       "content": "(!?)(#planospacotes#|#gold#|#silver#|#bronze#|#discount#|preços|precos|parcelas|pagar|ouro|prata|bronze|pacotes|reais|dilmas|temers|golpinhos|dolares)"
-     
+
+    },
+    {
+      "type": "SearchNearUnityReceiver",
+      "mediaType": "(text/plain)",
+      "priority": 0,
+      "content": "^(RUA|Rua|R.|rua|r.|R|r|AVENIDA|Avenida|avenida|AV.|av.|Av|TRAVESSA|Travessa|travessa|TRAV.|Trav.|trav.|Praca|Pra\u00E7a|Pca|P\u00E7a|Pca.|P\u00E7a.|praca|pra\u00E7a|pca.|p\u00E7a.|pca) ([\\w_\\s]+)([, ]+)?(\\d+)?\\s?([-\\d\\w\\\\ ]+)?$"
+    },
+    {
+      "type": "SearchNearUnityReceiver",
+      "mediaType": "(application/vnd.lime.location\\+json|application/vnd.lime.location+json)",
+      "priority": 0
+      
     }
+
   ],
   "settings": {
     "BotIdentifier": "PratiqueBot",
+
     "gyms": [
       {
         "Name": "Cachoeirinha",
@@ -34,7 +46,7 @@
         "Phone": "(31) 3433-2133",
         "latitude": "-19.8438646",
         "longitude": "-43.9186725",
-        "Modalities": [ "Musculação", "Spinning", "Pilates", "Natação", "Hidroginástica", "Muay-Thai", "Taekwon Do", "Boxe", "Ritmo",  "Personal" ]
+        "Modalities": [ "Musculação", "Spinning", "Pilates", "Natação", "Hidroginástica", "Muay-Thai", "Taekwon Do", "Boxe", "Ritmo", "Personal" ]
       },
       {
         "Name": "Sagrada Família",
@@ -42,7 +54,7 @@
         "Phone": "(31) 3047-2037",
         "latitude": "-19.8997295",
         "longitude": "-43.9232246",
-        "Modalities": [ "Musculação", "Spinning", "Pilates",  "Muay-Thai","Zumba", "Personal" ]
+        "Modalities": [ "Musculação", "Spinning", "Pilates", "Muay-Thai", "Zumba", "Personal" ]
       },
       {
         "Name": "Castelo",
@@ -66,7 +78,7 @@
         "Phone": "(31) 3646-2771",
         "latitude": "-19.8217706",
         "longitude": "-43.9971834",
-        "Modalities": [ "Musculação",  "Muay-Thai", "Taekwon Do", "Boxe",  "Zumba" ]
+        "Modalities": [ "Musculação", "Muay-Thai", "Taekwon Do", "Boxe", "Zumba" ]
       },
       {
         "Name": "Venda Nova",
@@ -74,7 +86,7 @@
         "Phone": "(31) 3327-0585",
         "latitude": "-19.8149073",
         "longitude": "-43.9561015",
-        "Modalities": [ "Musculação",  "Muay-Thai", "Boxe", "Zumba" ]
+        "Modalities": [ "Musculação", "Muay-Thai", "Boxe", "Zumba" ]
       },
       {
         "Name": "São Benedito",
@@ -82,7 +94,7 @@
         "Phone": "(31) 3637-7858",
         "latitude": "-19.7936603",
         "longitude": "-43.9364636",
-        "Modalities": [ "Musculação", "Spinning", "Pilates", "Muay-Thai", "Taekwon Do", "Zumba","Four Fit" ]
+        "Modalities": [ "Musculação", "Spinning", "Pilates", "Muay-Thai", "Taekwon Do", "Zumba", "Four Fit" ]
       }
 
 
@@ -94,3 +106,5 @@
   "schemaVersion": 2
 }
 //      AIzaSyAj0zH0MFBnL5oBpUt-SXeSgyCuoLi2caw                                   Google Static Map APIKey
+//      AIzaSyCkezlXx4pwBKaPE0ffdadiMgojkn8q7zQ                                   Google Maps ApiKey
+//      AIzaSyBZyyOKYUz-OSQx02ugUskjHTDKRrpDP5U                                   Google Maps Dir ApiKey

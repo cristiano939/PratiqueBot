@@ -63,7 +63,7 @@ namespace PratiqueBot.ContentResolver
 
         public string ReturnRandomHi()
         {
-            string[] hellos = new string[] { "Ola, {0}!\n Tudo Bem?", "oi oi, {0}!\n Como vai?", "e ai , {0}!\n 😀" };
+            string[] hellos = new string[] { "Ola, {0}!\n Tudo Bem?\n\n", "Oi Oi, {0}!\n Como vai?\n\n", "E ai , {0}! 😀\n\n" };
             return hellos[SingletonRandom.GetInstance().Next(0, 2)];
         }
     }
