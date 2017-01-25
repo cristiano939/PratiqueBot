@@ -18,7 +18,17 @@
     }
   ],
   "settings": {
-    "BotIdentifier": "PratiqueBot"
+    "BotIdentifier": "PratiqueBot",
+    "gyms": [
+      {
+        "Name": "Cachoeirinha",
+        "Address": "Av. Bernardo Vasconcelos | 1193 | Cachoeirinha ",
+        "Phone": "(31) 3424-4245",
+        "Modalities": [ "Musculação","Spinning","Pilates","Natação","Hidroginástica","Muay-Thai","Taekwon Do","Boxe","Ritmo","Zumba","Personal"  ]
+      }
+
+
+    ]
   },
   "settingsType": "Settings",
   "startupType": "Startup",

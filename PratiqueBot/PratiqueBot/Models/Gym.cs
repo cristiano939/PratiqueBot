@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace PratiqueBot.Models
 {
-    class Gym
+    public class Gym
     {
+        public string Name;
+        public string Address;
+        public List<string> Modalities;
+        public string Phone;
+
     }
 }
