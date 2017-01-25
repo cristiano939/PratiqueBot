@@ -8,7 +8,6 @@ using Takenet.MessagingHub.Client.Sender;
 using System.Diagnostics;
 using Takenet.MessagingHub.Client.Extensions.Directory;
 using Lime.Messaging.Resources;
-using PratiqueBot.ContentResolver;
 using Lime.Messaging.Contents;
 using PratiqueBot.Factory;
 using PratiqueBot.Models;
