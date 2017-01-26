@@ -20,9 +20,9 @@ namespace PratiqueBot
 {
     public class PlainTextMessageReceiver : BaseReceiver, IMessageReceiver
     {
-        public PlainTextMessageReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings) 
+        public PlainTextMessageReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
-         
+
         }
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ namespace PratiqueBot
 
             if (await IsBotActive(message.From))
             {
-           
+
                 if (input.Contains("#comofunciona#"))
                 {
                     await _sender.SendMessageAsync(CreateDoubtsCarrossel(), message.From, cancellationToken);
@@ -52,7 +52,15 @@ namespace PratiqueBot
                 {
                     await _sender.SendMessageAsync(new PlainText { Text = "Foi um prazer poder te ajudar 😉\n\nQuando precisar de mim novamente,\n só chamar!" }, message.From, cancellationToken);
                 }
-
+               
+                else if (_expression.IsByeMessage(input))
+                {
+                    await _sender.SendMessageAsync(_expression.ReturnByeMSG(), message.From, cancellationToken);
+                }
+                else if (_expression.IsThanksMessage(input))
+                {
+                    await _sender.SendMessageAsync(_expression.ReturnThanksMSG(), message.From, cancellationToken);
+                }
                 else
                 {
                     await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
@@ -66,7 +74,7 @@ namespace PratiqueBot
         }
 
 
-    
+
 
         public string GreetingsFirstMessage(Account account, string message)
         {
