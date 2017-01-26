@@ -110,7 +110,7 @@ namespace PratiqueBot
 
         public Document Start(Account account)
         {
-            string initialMessage = string.Format(_expression.ReturnRandomHi(), account.FullName.Split(' ')[0]) + "\n\nsou o assistente virtual da academia Pratique Fitness!\nEstou aqui para lhe mostrar nossos serviços, planos e encontrar a unidade mais proxima!";
+            string initialMessage = string.Format(_expression.ReturnRandomHi(), account.FullName.Split(' ')[0]) + "sou o assistente virtual da academia Pratique Fitness!\nEstou aqui para lhe mostrar nossos serviços, planos e encontrar a unidade mais proxima!";
             Select select = new Select
             {
                 Text = initialMessage,
