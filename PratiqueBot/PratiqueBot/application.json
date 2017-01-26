@@ -24,7 +24,7 @@
       "type": "HealthNetworkReceiver",
       "mediaType": "(text/plain)",
       "priority": 0,
-      "content": "(!?)(#redesaude#|Convite|convidar|amigo|Amigo|amiga|Amiga|Rede Saude|rede saude|Rede saude|rede Saude)"
+      "content": "(!?)(#redesaude#|#saudesite#|#saudefunciona#|Convite|convidar|amigo|Amigo|amiga|Amiga|Rede Saude|rede saude|Rede saude|rede Saude)"
     },{
       "type": "SportsReceivers",
       "mediaType": "(text/plain)",

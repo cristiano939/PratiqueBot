@@ -21,23 +21,11 @@ namespace PratiqueBot.Receivers
 {
     class SportsReceivers : BaseReceiver, IMessageReceiver
     {
-        private readonly IMessagingHubSender _sender;
-        private readonly IDirectoryExtension _directory;
-        private CommomExpressionsManager _expression;
-        private Settings _settings;
-        private DocumentService _service;
-        private readonly IBucketExtension _bucket;
 
 
         public SportsReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
-            _sender = sender;
-            _directory = directory;
-            _bucket = bucket;
-            _settings = settings;
-            _expression = new CommomExpressionsManager();
-            _service = new DocumentService();
-
+         
         }
 
         public async Task ReceiveAsync(Message message, CancellationToken cancellationToken)

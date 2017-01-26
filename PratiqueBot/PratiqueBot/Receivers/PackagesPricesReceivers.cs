@@ -19,13 +19,7 @@ namespace PratiqueBot.Receivers
 {
     class PackagesPricesReceivers : BaseReceiver, IMessageReceiver
     {
-        private readonly IMessagingHubSender _sender;
-        private readonly IDirectoryExtension _directory;
-        private CommomExpressionsManager _expression;
-        private Settings _settings;
-        private DocumentService _service;
-        private readonly IBucketExtension _bucket;
-
+ 
 
         public PackagesPricesReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
