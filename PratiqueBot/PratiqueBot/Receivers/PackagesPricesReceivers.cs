@@ -17,7 +17,7 @@ using Takenet.MessagingHub.Client.Extensions.Bucket;
 
 namespace PratiqueBot.Receivers
 {
-    class PackagesPricesReceivers : IMessageReceiver
+    class PackagesPricesReceivers : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
         private readonly IDirectoryExtension _directory;
@@ -27,14 +27,9 @@ namespace PratiqueBot.Receivers
         private readonly IBucketExtension _bucket;
 
 
-        public PackagesPricesReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings)
+        public PackagesPricesReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
-            _sender = sender;
-            _directory = directory;
-            _bucket = bucket;
-            _settings = settings;
-            _expression = new CommomExpressionsManager();
-            _service = new DocumentService();
+         
 
         }
 
@@ -44,32 +39,38 @@ namespace PratiqueBot.Receivers
 
 
             Trace.TraceInformation($"From: {message.From} \tContent: {message.Content}");
-            Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
+            if (await IsBotActive(message.From))
+            {
+                Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
 
-            if (input.Contains("#gold#"))
-            {
-                await ShowGoldPackage(account, message.From, cancellationToken);
+                if (input.Contains("#gold#"))
+                {
+                    await ShowGoldPackage(account, message.From, cancellationToken);
 
-            }
-            else if (input.Contains("#silver#"))
-            {
-                await ShowSilverPackage(account, message.From, cancellationToken);
+                }
+                else if (input.Contains("#silver#"))
+                {
+                    await ShowSilverPackage(account, message.From, cancellationToken);
 
-            }
-            else if (input.Contains("#bronze#"))
-            {
-                await ShowBronzePackage(account, message.From, cancellationToken);
+                }
+                else if (input.Contains("#bronze#"))
+                {
+                    await ShowBronzePackage(account, message.From, cancellationToken);
 
-            }
-            else if (input.Contains("#discount#"))
-            {
-                await ShowDiscountInfo(account, message.From, cancellationToken);
-            }
-            else
-            {
-                await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
+                }
+                else if (input.Contains("#discount#"))
+                {
+                    await ShowDiscountInfo(account, message.From, cancellationToken);
+                }
+                else
+                {
+                    await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
+                }
+
             }
         }
+
+
 
 
         public Document Start(Account account)
@@ -205,12 +206,6 @@ namespace PratiqueBot.Receivers
             await CanIHelpYou(account, node, cancellationToken);
         }
 
-        public async Task CanIHelpYou(Account account, Node node, CancellationToken cancellationToken)
-        {
-            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
-
-            Select select = new Select { Text = "Posso ajudar em mais alguma coisa?", Scope = SelectScope.Immediate, Options = new SelectOption[] { new SelectOption { Text = "Sim", Value = "#comecar#" }, new SelectOption { Text = "Não, obrigado", Value = "#encerrar#" } } };
-            await _sender.SendMessageAsync(select, node, cancellationToken);
-        }
+      
     }
 }

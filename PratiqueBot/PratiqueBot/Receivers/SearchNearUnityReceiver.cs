@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace PratiqueBot.Receivers
 {
-    class SearchNearUnityReceiver : IMessageReceiver
+    class SearchNearUnityReceiver : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
         private readonly IDirectoryExtension _directory;
@@ -30,7 +30,7 @@ namespace PratiqueBot.Receivers
 
 
 
-        public SearchNearUnityReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings)
+        public SearchNearUnityReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
             _sender = sender;
             _directory = directory;
@@ -45,52 +45,54 @@ namespace PratiqueBot.Receivers
         {
 
             Trace.TraceInformation($"From: {message.From} \tContent: {message.Content}");
-            Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
-            string lat, lng;
-            if (message.Content.GetType() == typeof(Location))
+            if (await IsBotActive(message.From))
             {
-                Location location = (Location)message.Content;
-                lat = location.Latitude.Value.ToString().Replace(",", ".");
-                lng = location.Longitude.Value.ToString().Replace(",", ".");
-            }
-            else
-            {
-                string input = message.Content.ToString();
-                JObject result = await _gclient.GetAddressData(input);
-                lat = result["results"][0]["geometry"]["location"]["lat"].Value<string>().Replace(",", ".");
-                lng = result["results"][0]["geometry"]["location"]["lng"].Value<string>().Replace(",", ".");
-            }
-
-            Gym gym = await SendNearestGym(lat, lng, _settings.Gyms);
-
-
-            List<CarrosselCard> cards = new List<CarrosselCard>();
-            cards.Add(
-                new CarrosselCard
+                Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
+                string lat, lng;
+                if (message.Content.GetType() == typeof(Location))
                 {
-                    CardContent = "Encontramos a Pratique mais próxima de você. 😎 Deslize para ⬅️️ esquerda",
-                    CardMediaHeader = new MediaLink
-                    {
-                        Text = "Encontramos a Pratique mais próxima de você. 😎 Deslize para ⬅️️ esquerda",
-                        Uri = new Uri("https://s23.postimg.org/ofubvasor/logo.png"),
-                        Title = "Pratique Fitness Academia",
-                        Type = new MediaType("image", "jpeg")
-                    },
-                    options = new List<CarrosselOptions>()
-                });
-
-            cards.Add(
-                new CarrosselCard
+                    Location location = (Location)message.Content;
+                    lat = location.Latitude.Value.ToString().Replace(",", ".");
+                    lng = location.Longitude.Value.ToString().Replace(",", ".");
+                }
+                else
                 {
-                    CardContent = string.Format("📍:{0} ☎️️: {1}", gym.Address, gym.Phone),
-                    CardMediaHeader = new MediaLink
+                    string input = message.Content.ToString();
+                    JObject result = await _gclient.GetAddressData(input);
+                    lat = result["results"][0]["geometry"]["location"]["lat"].Value<string>().Replace(",", ".");
+                    lng = result["results"][0]["geometry"]["location"]["lng"].Value<string>().Replace(",", ".");
+                }
+
+                Gym gym = await SendNearestGym(lat, lng, _settings.Gyms);
+
+
+                List<CarrosselCard> cards = new List<CarrosselCard>();
+                cards.Add(
+                    new CarrosselCard
                     {
-                        Text = string.Format("📍:{0} ☎️️: {1}", gym.Address, gym.Phone),
-                        Uri = new Uri(string.Format("https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&markers=color:red%7Clabel:C%7C{0},{1}&zoom=15&size=600x300&maptype=roadmap&key=AIzaSyAj0zH0MFBnL5oBpUt-SXeSgyCuoLi2caw", gym.latitude, gym.longitude)),
-                        Title = gym.Name,
-                        Type = new MediaType("image", "jpeg")
-                    },
-                    options = new List<CarrosselOptions>() {
+                        CardContent = "Encontramos a Pratique mais próxima de você. 😎 Deslize para ⬅️️ esquerda",
+                        CardMediaHeader = new MediaLink
+                        {
+                            Text = "Encontramos a Pratique mais próxima de você. 😎 Deslize para ⬅️️ esquerda",
+                            Uri = new Uri("https://s23.postimg.org/ofubvasor/logo.png"),
+                            Title = "Pratique Fitness Academia",
+                            Type = new MediaType("image", "jpeg")
+                        },
+                        options = new List<CarrosselOptions>()
+                    });
+
+                cards.Add(
+                    new CarrosselCard
+                    {
+                        CardContent = string.Format("📍:{0} ☎️️: {1}", gym.Address, gym.Phone),
+                        CardMediaHeader = new MediaLink
+                        {
+                            Text = string.Format("📍:{0} ☎️️: {1}", gym.Address, gym.Phone),
+                            Uri = new Uri(string.Format("https://maps.googleapis.com/maps/api/staticmap?center={0},{1}&markers=color:red%7Clabel:C%7C{0},{1}&zoom=15&size=600x300&maptype=roadmap&key=AIzaSyAj0zH0MFBnL5oBpUt-SXeSgyCuoLi2caw", gym.latitude, gym.longitude)),
+                            Title = gym.Name,
+                            Type = new MediaType("image", "jpeg")
+                        },
+                        options = new List<CarrosselOptions>() {
                         new CarrosselOptions {
                             label = new WebLink {
                                 Title = "Ligar Agora",
@@ -105,13 +107,14 @@ namespace PratiqueBot.Receivers
                             }
                          ,value = ""
                         }
-                    }
-                });
+                        }
+                    });
 
-            await _sender.SendMessageAsync(_service.CreateCarrossel(cards), message.From, cancellationToken);
-            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
-            await CanIHelpYou(account, message.From, cancellationToken);
+                await _sender.SendMessageAsync(_service.CreateCarrossel(cards), message.From, cancellationToken);
+                cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
+                await CanIHelpYou(account, message.From, cancellationToken);
 
+            }
         }
 
 
@@ -139,12 +142,6 @@ namespace PratiqueBot.Receivers
         }
 
 
-        public async Task CanIHelpYou(Account account, Node node, CancellationToken cancellationToken)
-        {
-            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
-
-            Select select = new Select { Text = "Posso ajudar em mais alguma coisa?", Scope = SelectScope.Immediate, Options = new SelectOption[] { new SelectOption { Text = "Sim", Value = "#comecar#" }, new SelectOption { Text = "Não, obrigado", Value = "#encerrar#" } } };
-            await _sender.SendMessageAsync(select, node, cancellationToken);
-        }
+     
     }
 }

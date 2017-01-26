@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace PratiqueBot.Receivers
 {
-    class SportsReceivers : IMessageReceiver
+    class SportsReceivers : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
         private readonly IDirectoryExtension _directory;
@@ -29,7 +29,7 @@ namespace PratiqueBot.Receivers
         private readonly IBucketExtension _bucket;
 
 
-        public SportsReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings)
+        public SportsReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
             _sender = sender;
             _directory = directory;
@@ -46,27 +46,29 @@ namespace PratiqueBot.Receivers
 
 
             Trace.TraceInformation($"From: {message.From} \tContent: {message.Content}");
-            Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
-
-            if (input.Contains("#modalidades#"))
+            if (await IsBotActive(message.From))
             {
-                await Start(account, message.From, _settings.Sports, cancellationToken);
+                Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
 
-            }
-            else
-            {
-                Modality modality = InputToModality(input);
-                string text = GetModalityText(modality);
-                await SendModalityText(text, message.From, cancellationToken);
-                cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
-                await _sender.SendMessageAsync(GetModalityWebLink(modality), message.From, cancellationToken);
-                cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
-                var carrossel = CreateCarrossel(GetGymForModality(modality, _settings.Gyms));
-                await _sender.SendMessageAsync(string.Format("As unidades que possuem a modalidade {0} são :", GetModalityName(modality)), message.From, cancellationToken);
-                await _sender.SendMessageAsync(carrossel, message.From, cancellationToken);
-                await _sender.SendMessageAsync("Os preços podem variar de unidade para unidade, portanto sugiro entrar em contato e falar com nossos atendentes. ",message.From,cancellationToken);
-                await CanIHelpYou(account, message.From, cancellationToken);
+                if (input.Contains("#modalidades#"))
+                {
+                    await Start(account, message.From, _settings.Sports, cancellationToken);
 
+                }
+                else
+                {
+                    Modality modality = InputToModality(input);
+                    string text = GetModalityText(modality);
+                    await SendModalityText(text, message.From, cancellationToken);
+                    cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
+                    await _sender.SendMessageAsync(GetModalityWebLink(modality), message.From, cancellationToken);
+                    cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
+                    var carrossel = CreateCarrossel(GetGymForModality(modality, _settings.Gyms));
+                    await _sender.SendMessageAsync(string.Format("As unidades que possuem a modalidade {0} são :", GetModalityName(modality)), message.From, cancellationToken);
+                    await _sender.SendMessageAsync(carrossel, message.From, cancellationToken);
+                    await _sender.SendMessageAsync("Os preços podem variar de unidade para unidade, portanto sugiro entrar em contato e falar com nossos atendentes. ", message.From, cancellationToken);
+                    await CanIHelpYou(account, message.From, cancellationToken);
+                }
             }
         }
 
@@ -97,8 +99,8 @@ namespace PratiqueBot.Receivers
             cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
             await _sender.SendMessageAsync("Você pode me perguntar sobre qualquer modalidade quando quiser,\n basta me dizer o nome dela que eu lhe conto mais sobre ela e em quais unidades você pode fazê-la. 😉 ", node, cancellationToken);
             cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
-            Select select = new Select { Text = "Se quiser voltar para o começo, clique abaixo: ",  Options = new SelectOption[] { new SelectOption { Text = "Voltar", Value = "#comecar#" } } };
-            await _sender.SendMessageAsync(select,node,cancellationToken);
+            Select select = new Select { Text = "Se quiser voltar para o começo, clique abaixo: ", Options = new SelectOption[] { new SelectOption { Text = "Voltar", Value = "#comecar#" } } };
+            await _sender.SendMessageAsync(select, node, cancellationToken);
         }
 
         public string GetModalityText(Modality modality)
@@ -317,13 +319,6 @@ namespace PratiqueBot.Receivers
             return modality;
         }
 
-        public async Task CanIHelpYou(Account account, Node node, CancellationToken cancellationToken)
-        {
-            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
-
-            Select select = new Select { Text = "Posso ajudar em mais alguma coisa?", Scope = SelectScope.Immediate, Options = new SelectOption[] { new SelectOption { Text = "Sim", Value = "#comecar#" }, new SelectOption { Text = "Não, obrigado", Value = "#encerrar#" } } };
-            await _sender.SendMessageAsync(select, node, cancellationToken);
-        }
     }
 
     public enum Modality

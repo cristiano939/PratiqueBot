@@ -104,6 +104,7 @@
     <Compile Include="Models\Gym.cs" />
     <Compile Include="PlainTextMessageReceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receivers\BaseReceiver.cs" />
     <Compile Include="Receivers\HealthNetworkReceiver.cs" />
     <Compile Include="Receivers\PackagesPricesReceivers.cs" />
     <Compile Include="Receivers\SearchNearUnityReceiver.cs" />

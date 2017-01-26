@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace PratiqueBot.Receivers
 {
-    class UnitysReceivers : IMessageReceiver
+    class UnitysReceivers : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
         private readonly IDirectoryExtension _directory;
@@ -28,7 +28,7 @@ namespace PratiqueBot.Receivers
         private readonly IBucketExtension _bucket;
 
 
-        public UnitysReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings)
+        public UnitysReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
             _sender = sender;
             _directory = directory;
@@ -45,39 +45,35 @@ namespace PratiqueBot.Receivers
 
 
             Trace.TraceInformation($"From: {message.From} \tContent: {message.Content}");
-            Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
+            if (await IsBotActive(message.From))
+            {
+                Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
 
-            if (input.Contains("#unidades#"))
-            {
-                await _sender.SendMessageAsync(Start(account, _settings.Gyms), message.From, cancellationToken);
+                if (input.Contains("#unidades#"))
+                {
+                    await _sender.SendMessageAsync(Start(account, _settings.Gyms), message.From, cancellationToken);
 
-            }
-            else if (input.Contains("#vertodas#"))
-            {
-                await ShowAllGyms(account,message.From,_settings.Gyms,cancellationToken);
-            }
-            else if (input.Contains("#unidmodalids#"))
-            {
-                await ShowAllModalities(account,message.From,_settings.Gyms,input,cancellationToken);
-            }
-            else if (input.Contains("#searchnearest#"))
-            {
-                await SearchNearest(account, message.From, cancellationToken);
-            }
-            else
-            {
-                await _sender.SendMessageAsync(Start(account, _settings.Gyms), message.From, cancellationToken);
+                }
+                else if (input.Contains("#vertodas#"))
+                {
+                    await ShowAllGyms(account, message.From, _settings.Gyms, cancellationToken);
+                }
+                else if (input.Contains("#unidmodalids#"))
+                {
+                    await ShowAllModalities(account, message.From, _settings.Gyms, input, cancellationToken);
+                }
+                else if (input.Contains("#searchnearest#"))
+                {
+                    await SearchNearest(account, message.From, cancellationToken);
+                }
+                else
+                {
+                    await _sender.SendMessageAsync(Start(account, _settings.Gyms), message.From, cancellationToken);
+                }
             }
         }
 
 
-        public async Task CanIHelpYou(Account account, Node node, CancellationToken cancellationToken)
-        {
-            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
-
-            Select select = new Select { Text = "Posso ajudar em mais alguma coisa?", Scope = SelectScope.Immediate, Options = new SelectOption[] { new SelectOption { Text = "Sim", Value = "#comecar#" }, new SelectOption { Text = "Não, obrigado", Value = "#encerrar#" } } };
-            await _sender.SendMessageAsync(select, node, cancellationToken);
-        }
 
         public Document Start(Account account, List<Gym> gyms)
         {
@@ -108,7 +104,7 @@ namespace PratiqueBot.Receivers
             PlainText simpleMsg = new PlainText { Text = text };
             await _sender.SendMessageAsync(simpleMsg, node, cancellationToken);
             cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
-            await _sender.SendMessageAsync("Você pode tambem enviar a localização pelo seu celular, veja a imagem de como fazer 😉", node,cancellationToken);
+            await _sender.SendMessageAsync("Você pode tambem enviar a localização pelo seu celular, veja a imagem de como fazer 😉", node, cancellationToken);
             cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
             MediaLink tutorialMedia = new MediaLink { Type = new MediaType("image", "jpeg"), Uri = new Uri("https://s23.postimg.org/u7vrcpshn/usar_localiza_o.jpg") };
             await _sender.SendMessageAsync(tutorialMedia, node, cancellationToken);
@@ -123,16 +119,16 @@ namespace PratiqueBot.Receivers
             input = input.Replace("#unidmodalids#", "");
             if (input.Length > 3)
             {
-                await ShowGymModalities(account, node, gyms,input, cancellationToken);
+                await ShowGymModalities(account, node, gyms, input, cancellationToken);
             }
             else
             {
                 await ShowAllGymsSelect(account, node, gyms, cancellationToken);
             }
-            
+
         }
 
-        public async Task ShowGymModalities(Account account, Node node, List<Gym> gyms, string input,CancellationToken cancellationToken)
+        public async Task ShowGymModalities(Account account, Node node, List<Gym> gyms, string input, CancellationToken cancellationToken)
         {
             Gym gym = (from gymm in gyms where gymm.Name == input select gymm).FirstOrDefault();
             string simpleMsg = string.Format("As modalidades da unidade {0} são:\n", gym.Name);
@@ -140,7 +136,7 @@ namespace PratiqueBot.Receivers
             {
                 simpleMsg = simpleMsg + "\n✅" + modalities;
             }
-            await _sender.SendMessageAsync(simpleMsg,node,cancellationToken);
+            await _sender.SendMessageAsync(simpleMsg, node, cancellationToken);
             await CanIHelpYou(account, node, cancellationToken);
         }
 
@@ -158,7 +154,7 @@ namespace PratiqueBot.Receivers
 
 
 
-        public async Task ShowAllGyms(Account account, Node node,List<Gym> gyms, CancellationToken cancellationToken)
+        public async Task ShowAllGyms(Account account, Node node, List<Gym> gyms, CancellationToken cancellationToken)
         {
             List<CarrosselCard> cards = new List<CarrosselCard>();
             foreach (Gym gym in gyms)
@@ -193,8 +189,8 @@ namespace PratiqueBot.Receivers
                  });
             }
             var carrossel = _service.CreateCarrossel(cards);
-            await _sender.SendMessageAsync(carrossel,node,cancellationToken);
-            await CanIHelpYou(account,node,cancellationToken);
+            await _sender.SendMessageAsync(carrossel, node, cancellationToken);
+            await CanIHelpYou(account, node, cancellationToken);
         }
     }
 }

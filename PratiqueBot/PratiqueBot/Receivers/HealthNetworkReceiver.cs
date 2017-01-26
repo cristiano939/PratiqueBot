@@ -17,7 +17,7 @@ using Takenet.MessagingHub.Client.Extensions.Bucket;
 
 namespace PratiqueBot.Receivers
 {
-    class HealthNetworkReceiver : IMessageReceiver
+    class HealthNetworkReceiver : BaseReceiver, IMessageReceiver
     {
         private readonly IMessagingHubSender _sender;
         private readonly IDirectoryExtension _directory;
@@ -27,14 +27,9 @@ namespace PratiqueBot.Receivers
         private readonly IBucketExtension _bucket;
 
 
-        public HealthNetworkReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings)
+        public HealthNetworkReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
         {
-            _sender = sender;
-            _directory = directory;
-            _bucket = bucket;
-            _settings = settings;
-            _expression = new CommomExpressionsManager();
-            _service = new DocumentService();
+           
 
         }
 
@@ -44,23 +39,40 @@ namespace PratiqueBot.Receivers
 
 
             Trace.TraceInformation($"From: {message.From} \tContent: {message.Content}");
-            Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
-
-            if (input.Contains("#redesaude#"))
+            if (await IsBotActive(message.From))
             {
-                await _sender.SendMessageAsync("Em construção", message.From, cancellationToken);
-                await CanIHelpYou(account, message.From, cancellationToken);
+                Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
 
+                if (input.Contains("#redesaude#"))
+                {
+                    await _sender.SendMessageAsync("Em construção", message.From, cancellationToken);
+                    await CanIHelpYou(account, message.From, cancellationToken);
+
+                } 
             }
         }
 
-
-        public async Task CanIHelpYou(Account account, Node node, CancellationToken cancellationToken)
+        private async Task<bool> IsBotActive(Node from)
         {
-            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
+            try
+            {
+                var data = await _bucket.GetAsync<JsonDocument>(from.ToString() + _settings.BotIdentifier + "_suspended");
 
-            Select select = new Select { Text = "Posso ajudar em mais alguma coisa?", Scope = SelectScope.Immediate, Options = new SelectOption[] { new SelectOption { Text = "Sim", Value = "#comecar#" }, new SelectOption { Text = "Não, obrigado", Value = "#encerrar#" } } };
-            await _sender.SendMessageAsync(select, node, cancellationToken);
+                if (data != null)
+                {
+                    return false;
+                }
+                else return true;
+
+            }
+            catch
+            {
+                return true;
+            }
+
         }
+
+
+       
     }
 }
