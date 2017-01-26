@@ -48,14 +48,14 @@ namespace PratiqueBot
 
             if (await IsBotActive(message.From))
             {
-                if (_expression.IsFirstMessage(input))
-                {
-                    await _sender.SendMessageAsync(GreetingsFirstMessage(account, input), message.From, cancellationToken);
-                    cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 4));
-                    await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
+                //if (_expression.IsFirstMessage(input))
+                //{
+                //    await _sender.SendMessageAsync(GreetingsFirstMessage(account, input), message.From, cancellationToken);
+                //    cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 4));
+                //    await _sender.SendMessageAsync(Start(account), message.From, cancellationToken);
 
-                }
-                else if (input.Contains("#comofunciona#"))
+                //}
+                if (input.Contains("#comofunciona#"))
                 {
                     await _sender.SendMessageAsync(CreateDoubtsCarrossel(), message.From, cancellationToken);
                 }
@@ -69,7 +69,7 @@ namespace PratiqueBot
                 }
                 else if (input.Contains("#encerrar#"))
                 {
-                    await _sender.SendMessageAsync(new PlainText {Text= "Foi um prazer poder te ajudar 😉\n\nQuando precisar de mim novamente,\n só chamar!" },message.From,cancellationToken);
+                    await _sender.SendMessageAsync(new PlainText { Text = "Foi um prazer poder te ajudar 😉\n\nQuando precisar de mim novamente,\n só chamar!" }, message.From, cancellationToken);
                 }
 
                 else
@@ -82,6 +82,15 @@ namespace PratiqueBot
                 await CommandActivateBot(message.From, account, cancellationToken);
             }
 
+        }
+
+
+        public async Task CanIHelpYou(Account account, Node node, CancellationToken cancellationToken)
+        {
+            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
+
+            Select select = new Select { Text = "Posso ajudar em mais alguma coisa?", Scope = SelectScope.Immediate, Options = new SelectOption[] { new SelectOption { Text = "Sim", Value = "#comecar#" }, new SelectOption { Text = "Não, obrigado", Value = "#encerrar#" } } };
+            await _sender.SendMessageAsync(select, node, cancellationToken);
         }
 
         public string GreetingsFirstMessage(Account account, string message)
@@ -101,7 +110,7 @@ namespace PratiqueBot
 
         public Document Start(Account account)
         {
-            string initialMessage = string.Format(_expression.ReturnRandomHi(), account.FullName.Split(' ')[0]) +"\n\nsou o assistente virtual da academia Pratique Fitness!\nEstou aqui para lhe mostrar nossos serviços, planos e encontrar a unidade mais proxima!";
+            string initialMessage = string.Format(_expression.ReturnRandomHi(), account.FullName.Split(' ')[0]) + "\n\nsou o assistente virtual da academia Pratique Fitness!\nEstou aqui para lhe mostrar nossos serviços, planos e encontrar a unidade mais proxima!";
             Select select = new Select
             {
                 Text = initialMessage,
@@ -122,7 +131,7 @@ namespace PratiqueBot
                 contentSuspend.Add("suspend", "true");
                 var jsonDocSuspend = new JsonDocument(contentSuspend, new MediaType("application", "json"));
 
-                await _bucket.SetAsync<JsonDocument>(from.ToString() + _settings.BotIdentifier+"_suspended", jsonDocSuspend, new TimeSpan(0, 30, 0));
+                await _bucket.SetAsync<JsonDocument>(from.ToString() + _settings.BotIdentifier + "_suspended", jsonDocSuspend, new TimeSpan(0, 30, 0));
 
                 Select select = new Select() { Text = "O Pratique Digital aproveitou a folga para malhar, 💪\n\nem breve um atendente deve entrar em contato, por favor aguarde.\n\nPara falar novamente com o Pratique Digital envie #VOLTA" };
                 SelectOption[] option = new SelectOption[1];
@@ -159,7 +168,7 @@ namespace PratiqueBot
         {
             try
             {
-                var data = await _bucket.GetAsync<JsonDocument>(from.ToString() + _settings.BotIdentifier+ "_suspended");
+                var data = await _bucket.GetAsync<JsonDocument>(from.ToString() + _settings.BotIdentifier + "_suspended");
 
                 if (data != null)
                 {

@@ -21,6 +21,23 @@
       "content": "^(RUA|Rua|R.|rua|r.|R|r|AVENIDA|Avenida|avenida|AV.|av.|Av|TRAVESSA|Travessa|travessa|TRAV.|Trav.|trav.|Praca|Pra\u00E7a|Pca|P\u00E7a|Pca.|P\u00E7a.|praca|pra\u00E7a|pca.|p\u00E7a.|pca) ([\\w_\\s]+)([, ]+)?(\\d+)?\\s?([-\\d\\w\\\\ ]+)?$"
     },
     {
+      "type": "HealthNetworkReceiver",
+      "mediaType": "(text/plain)",
+      "priority": 0,
+      "content": "(!?)(#redesaude#|Convite|convidar|amigo|Amigo|amiga|Amiga|Rede Saude|rede saude|Rede saude|rede Saude)"
+    },{
+      "type": "SportsReceivers",
+      "mediaType": "(text/plain)",
+      "priority": 0,
+      "content": "(!?)(#modalidades#|Modalidades|modalidades|esportes|Esportes|Aulas|aulas|Muay|muay|taekwon|Taekwon|Jitsu|jitsu|dança|Dança|Danca|danca|Spinning|spinning|natacao|Natacao|Natação|natação|natacão|Natacão|Personal|personal)"
+    },{
+      "type": "UnitysReceivers",
+      "mediaType": "(text/plain)",
+      "priority": 0,
+      "content": "(!?)(#unidades#|unidades|Unidades|#vertodas#|#unidmodalids#.*|#searchnearest#)"
+    },
+
+    {
       "type": "SearchNearUnityReceiver",
       "mediaType": "(application/vnd.lime.location\\+json|application/vnd.lime.location+json)",
       "priority": 0

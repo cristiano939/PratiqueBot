@@ -46,11 +46,21 @@ namespace PratiqueBot.Receivers
             Trace.TraceInformation($"From: {message.From} \tContent: {message.Content}");
             Account account = await _directory.GetDirectoryAccountAsync(message.From.ToIdentity(), cancellationToken);
 
-            if (input.Contains("#gold#"))
+            if (input.Contains("#modalidades#"))
             {
-                
+                await _sender.SendMessageAsync("Em construção", message.From, cancellationToken);
+                await CanIHelpYou(account, message.From, cancellationToken);
 
             }
+        }
+
+
+        public async Task CanIHelpYou(Account account, Node node, CancellationToken cancellationToken)
+        {
+            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 10));
+
+            Select select = new Select { Text = "Posso ajudar em mais alguma coisa?", Scope = SelectScope.Immediate, Options = new SelectOption[] { new SelectOption { Text = "Sim", Value = "#comecar#" }, new SelectOption { Text = "Não, obrigado", Value = "#encerrar#" } } };
+            await _sender.SendMessageAsync(select, node, cancellationToken);
         }
     }
 }
