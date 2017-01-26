@@ -64,7 +64,7 @@ namespace PratiqueBot.Receivers
                 var carrossel = CreateCarrossel(GetGymForModality(modality, _settings.Gyms));
                 await _sender.SendMessageAsync(string.Format("As unidades que possuem a modalidade {0} são :", GetModalityName(modality)), message.From, cancellationToken);
                 await _sender.SendMessageAsync(carrossel, message.From, cancellationToken);
-                await _sender.SendMessageAsync("Preços podem variar de unidade para unidade, portanto sujiro entrar em contato. ",message.From,cancellationToken);
+                await _sender.SendMessageAsync("Os preços podem variar de unidade para unidade, portanto sugiro entrar em contato e falar com nossos atendentes. ",message.From,cancellationToken);
                 await CanIHelpYou(account, message.From, cancellationToken);
 
             }
