@@ -61,7 +61,7 @@ namespace PratiqueBot.Receivers
                 lng = result["results"][0]["geometry"]["location"]["lng"].Value<string>().Replace(",", ".");
             }
 
-            Gym gym = await SendNearestGym(lat, lng, _settings.gyms);
+            Gym gym = await SendNearestGym(lat, lng, _settings.Gyms);
 
 
             List<CarrosselCard> cards = new List<CarrosselCard>();

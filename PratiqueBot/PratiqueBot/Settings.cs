@@ -10,8 +10,8 @@ namespace PratiqueBot
     public class Settings
     {
         public string BotIdentifier { get; set; }
-        public List<Gym> gyms { get; set; }
-       
+        public List<Gym> Gyms { get; set; }
+       public List<string> Sports { get; set; }
 
 
     }

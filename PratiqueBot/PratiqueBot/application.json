@@ -29,7 +29,7 @@
       "type": "SportsReceivers",
       "mediaType": "(text/plain)",
       "priority": 0,
-      "content": "(!?)(#modalidades#|Modalidades|modalidades|esportes|Esportes|Aulas|aulas|Muay|muay|taekwon|Taekwon|Jitsu|jitsu|dança|Dança|Danca|danca|Spinning|spinning|natacao|Natacao|Natação|natação|natacão|Natacão|Personal|personal)"
+      "content": "(!?)(#modalidades#|Modalidades|modalidades|esportes|Esportes|Aulas|aulas|Muay|muay|taekwon|Taekwon|Jitsu|jitsu|dança|Dança|Danca|danca|Spinning|spinning|natacao|Natacao|Natação|natação|natacão|Natacão|Personal|personal|Muay|muay|Muai|muai|Thai|Thay|thai|thay|boxe tailandês|boxe tailandes|Boxe Tailandês|boxe Tailandês|Boxe tailandês|Boxe Tailandes|boxe Tailandes|Boxe tailandes|Luta Tailandeza|luta Tailandeza|Luta tailandeza|luta tailandeza|boxe thailandês|boxe thailandes|Boxe Thailandês|boxe Thailandês|Boxe thailandês|Boxe Thailandes|boxe Thailandes|Boxe thailandes|Luta Thailandeza|luta Thailandeza|Luta thailandeza|luta thailandeza|Boxe|boxe|Ritmos|ritmos|axé|axe|Axé|Axe|coreografias|coreografia|Coreografias|Coreografia|Zumba|zumba|Natação|natação|natacão|nataçao|natacao|Natacão|Nataçao|Natacao|Musculação|Musculacao|Musculaçao|Musculacão|musculação|musculacao|musculaçao|musculacão|Malhar|malhar|Malhação|malhação|malhacão|malhacao|puxar ferro|Puxar Ferro|Puxar ferro|puxar Ferro|Spinning|spinning|spining|Spining|bicicleta|Bicicleta|bicicreta|bike|Hidroginastica|Hidroginástica|hidro|Hidro|ginástica na piscina|Taekw.*|taekw.*|Jiu.*|jiu.*|.*Jitsu|.*jitsu|Personal|personal|FourFit|fourFit|fourfit|forFit|Forfit|ForFit|Four Fit|four Fit|four fit|for Fit|For fit|For Fit)"
     },{
       "type": "UnitysReceivers",
       "mediaType": "(text/plain)",
@@ -47,8 +47,8 @@
   ],
   "settings": {
     "BotIdentifier": "PratiqueBot",
-
-    "gyms": [
+    "Sports": ["Musculação", "Spinning", "Pilates", "Natação", "Hidroginástica", "Muay-Thai", "Taekwon Do", "Boxe", "Ritmo", "Zumba", "Personal","Jiu Jitsu","Four Fit" ],
+    "Gyms": [
       {
         "Name": "Cachoeirinha",
         "Address": "Av. Bernardo Vasconcelos | 1193 | Cachoeirinha ",

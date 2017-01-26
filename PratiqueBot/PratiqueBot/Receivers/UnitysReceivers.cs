@@ -49,16 +49,16 @@ namespace PratiqueBot.Receivers
 
             if (input.Contains("#unidades#"))
             {
-                await _sender.SendMessageAsync(Start(account, _settings.gyms), message.From, cancellationToken);
+                await _sender.SendMessageAsync(Start(account, _settings.Gyms), message.From, cancellationToken);
 
             }
             else if (input.Contains("#vertodas#"))
             {
-                await ShowAllGyms(account,message.From,_settings.gyms,cancellationToken);
+                await ShowAllGyms(account,message.From,_settings.Gyms,cancellationToken);
             }
             else if (input.Contains("#unidmodalids#"))
             {
-                await ShowAllModalities(account,message.From,_settings.gyms,input,cancellationToken);
+                await ShowAllModalities(account,message.From,_settings.Gyms,input,cancellationToken);
             }
             else if (input.Contains("#searchnearest#"))
             {
@@ -66,7 +66,7 @@ namespace PratiqueBot.Receivers
             }
             else
             {
-                await _sender.SendMessageAsync(Start(account, _settings.gyms), message.From, cancellationToken);
+                await _sender.SendMessageAsync(Start(account, _settings.Gyms), message.From, cancellationToken);
             }
         }
 
