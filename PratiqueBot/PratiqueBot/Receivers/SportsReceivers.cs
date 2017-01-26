@@ -64,6 +64,7 @@ namespace PratiqueBot.Receivers
                 var carrossel = CreateCarrossel(GetGymForModality(modality, _settings.Gyms));
                 await _sender.SendMessageAsync(string.Format("As unidades que possuem a modalidade {0} são :", GetModalityName(modality)), message.From, cancellationToken);
                 await _sender.SendMessageAsync(carrossel, message.From, cancellationToken);
+                await _sender.SendMessageAsync("Preços podem variar de unidade para unidade, portanto sujiro entrar em contato. ",message.From,cancellationToken);
                 await CanIHelpYou(account, message.From, cancellationToken);
 
             }
@@ -86,7 +87,7 @@ namespace PratiqueBot.Receivers
 
         public async Task Start(Account account, Node node, List<string> modalities, CancellationToken cancellationToken)
         {
-            string modelList = "";
+            string modelList = "\n";
             foreach (string model in modalities)
             {
                 modelList = modelList + "✅" + model + "\n";
@@ -95,6 +96,8 @@ namespace PratiqueBot.Receivers
             await _sender.SendMessageAsync(initialText, node, cancellationToken);
             cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
             await _sender.SendMessageAsync("Você pode me perguntar sobre qualquer modalidade quando quiser,\n basta me enviar o nome que eu lhe conto mais sobre ela e em quais unidades você pode fazê-la. 😉 ", node, cancellationToken);
+            cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
+            Select select = new Select { Text = "Se quiser voltar para o começo, clique abaixo: ", Scope = SelectScope.Persistent, Options = new SelectOption[] { new SelectOption { Text = "Voltar", Value = "#comecar#" } } };
         }
 
         public string GetModalityText(Modality modality)
