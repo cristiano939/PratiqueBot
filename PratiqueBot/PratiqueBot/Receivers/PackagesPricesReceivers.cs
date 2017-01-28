@@ -20,11 +20,11 @@ namespace PratiqueBot.Receivers
 {
     class PackagesPricesReceivers : BaseReceiver, IMessageReceiver
     {
- 
 
-        public PackagesPricesReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track) : base(sender, directory, bucket, settings,track)
+
+        public PackagesPricesReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track) : base(sender, directory, bucket, settings, track)
         {
-         
+
 
         }
 
@@ -40,7 +40,7 @@ namespace PratiqueBot.Receivers
 
                 if (input.Contains("#gold#"))
                 {
-                    await _track.AddAsync("Pacotes Pesquisados","Ouro");
+                    await _track.AddAsync("Pacotes Pesquisados", "Ouro");
                     await ShowGoldPackage(account, message.From, cancellationToken);
 
                 }
@@ -166,13 +166,35 @@ namespace PratiqueBot.Receivers
                 {
                     new CarrosselOptions {
                         label = "Encontrar Unidade",
-                        value = "#search#" }
+                        value = "#searchnearest#" }
+                }
+            });
+
+            cards.Add(new CarrosselCard
+            {
+                CardContent = "Posso te ajudar em algo mais?",
+                CardMediaHeader =
+         new MediaLink
+         {
+             Text = "",
+             Uri = new Uri("https://s23.postimg.org/qetna6huz/pratique.jpg"),
+             Title = "Posso te ajudar em algo mais?",
+             Type = new MediaType("image", "jpeg")
+         },
+                options = new List<CarrosselOptions>()
+                {
+                    new CarrosselOptions {
+                        label = "Sim",
+                        value = "#comecar#" },
+                    new CarrosselOptions {
+                        label = "Não, obrigado",
+                        value = "#encerrar#" }
                 }
             });
 
             var carrossel = _service.CreateCarrossel(cards);
             await _sender.SendMessageAsync(carrossel, node, cancellationToken);
-            await CanIHelpYou(account, node, cancellationToken);
+            
 
 
         }
@@ -205,6 +227,6 @@ namespace PratiqueBot.Receivers
             await CanIHelpYou(account, node, cancellationToken);
         }
 
-      
+
     }
 }
