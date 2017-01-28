@@ -14,6 +14,8 @@ using PratiqueBot.Factory;
 using PratiqueBot.Models;
 using System.Collections.Generic;
 using Takenet.MessagingHub.Client.Extensions.Bucket;
+using Takenet.MessagingHub.Client.Extensions.EventTracker;
+
 namespace PratiqueBot.Receivers
 {
     public abstract class BaseReceiver
@@ -21,17 +23,20 @@ namespace PratiqueBot.Receivers
         public readonly IMessagingHubSender _sender;
         public readonly IDirectoryExtension _directory;
         public CommomExpressionsManager _expression;
+        public readonly IBucketExtension _bucket;
+        public readonly IEventTrackExtension _track;
         public Settings _settings;
         public DocumentService _service;
-        public readonly IBucketExtension _bucket;
+        
 
 
-        public BaseReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings)
+        public BaseReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track)
         {
             _sender = sender;
             _directory = directory;
             _bucket = bucket;
             _settings = settings;
+            _track = track;
             _expression = new CommomExpressionsManager();
             _service = new DocumentService();
 

@@ -14,6 +14,7 @@ using PratiqueBot.Factory;
 using PratiqueBot.Models;
 using System.Collections.Generic;
 using Takenet.MessagingHub.Client.Extensions.Bucket;
+using Takenet.MessagingHub.Client.Extensions.EventTracker;
 
 namespace PratiqueBot.Receivers
 {
@@ -21,7 +22,7 @@ namespace PratiqueBot.Receivers
     {
 
 
-        public HealthNetworkReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
+        public HealthNetworkReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track) : base(sender, directory, bucket, settings,track)
         {
 
 

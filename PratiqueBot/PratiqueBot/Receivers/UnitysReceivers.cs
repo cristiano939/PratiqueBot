@@ -15,6 +15,7 @@ using PratiqueBot.Models;
 using System.Collections.Generic;
 using Takenet.MessagingHub.Client.Extensions.Bucket;
 using System.Linq;
+using Takenet.MessagingHub.Client.Extensions.EventTracker;
 
 namespace PratiqueBot.Receivers
 {
@@ -22,7 +23,7 @@ namespace PratiqueBot.Receivers
     {
 
 
-        public UnitysReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
+        public UnitysReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track) : base(sender, directory, bucket, settings,track)
         {
          
 
@@ -120,6 +121,7 @@ namespace PratiqueBot.Receivers
         public async Task ShowGymModalities(Account account, Node node, List<Gym> gyms, string input, CancellationToken cancellationToken)
         {
             Gym gym = (from gymm in gyms where gymm.Name == input select gymm).FirstOrDefault();
+            await _track.AddAsync("Unidade Pesquisada", gym.Name);
             string simpleMsg = string.Format("As modalidades da unidade {0} são:\n", gym.Name);
             foreach (string modalities in gym.Modalities)
             {

@@ -15,12 +15,13 @@ using PratiqueBot.Models;
 using System.Collections.Generic;
 using Takenet.MessagingHub.Client.Extensions.Bucket;
 using PratiqueBot.Receivers;
+using Takenet.MessagingHub.Client.Extensions.EventTracker;
 
 namespace PratiqueBot
 {
     public class PlainTextMessageReceiver : BaseReceiver, IMessageReceiver
     {
-        public PlainTextMessageReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
+        public PlainTextMessageReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track ) : base(sender, directory, bucket, settings,track)
         {
 
         }
@@ -38,6 +39,7 @@ namespace PratiqueBot
 
                 if (input.Contains("#comofunciona#"))
                 {
+                    await _track.AddAsync("Dúvidas", "Houve dúvida");
                     await _sender.SendMessageAsync(CreateDoubtsCarrossel(), message.From, cancellationToken);
                 }
                 else if (input.Contains("#comecar#"))
@@ -109,6 +111,7 @@ namespace PratiqueBot
         {
             try
             {
+                await _track.AddAsync("Chamar Atendimento", "Atendente");
                 //TIPO 1
                 IDictionary<string, object> contentSuspend = new Dictionary<string, object>();
                 contentSuspend.Add("suspend", "true");
@@ -136,6 +139,7 @@ namespace PratiqueBot
         {
             try
             {
+                await _track.AddAsync("Chamar Atendimento", "Voltar Bot");
                 await _bucket.DeleteAsync(from.ToString() + _settings.BotIdentifier + "_suspended");
                 await _sender.SendMessageAsync(new PlainText { Text = string.Format("Terminei minha ficha agora,😅\nvoltei para atender você {0}.", account.FullName.Split(' ')[0]) }, from);
                 cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));

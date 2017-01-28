@@ -14,6 +14,7 @@ using PratiqueBot.Factory;
 using PratiqueBot.Models;
 using System.Collections.Generic;
 using Takenet.MessagingHub.Client.Extensions.Bucket;
+using Takenet.MessagingHub.Client.Extensions.EventTracker;
 
 namespace PratiqueBot.Receivers
 {
@@ -21,7 +22,7 @@ namespace PratiqueBot.Receivers
     {
  
 
-        public PackagesPricesReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
+        public PackagesPricesReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track) : base(sender, directory, bucket, settings,track)
         {
          
 
@@ -39,21 +40,25 @@ namespace PratiqueBot.Receivers
 
                 if (input.Contains("#gold#"))
                 {
+                    await _track.AddAsync("Pacotes Pesquisados","Ouro");
                     await ShowGoldPackage(account, message.From, cancellationToken);
 
                 }
                 else if (input.Contains("#silver#"))
                 {
+                    await _track.AddAsync("Pacotes Pesquisados", "Prata");
                     await ShowSilverPackage(account, message.From, cancellationToken);
 
                 }
                 else if (input.Contains("#bronze#"))
                 {
+                    await _track.AddAsync("Pacotes Pesquisados", "Bronze");
                     await ShowBronzePackage(account, message.From, cancellationToken);
 
                 }
                 else if (input.Contains("#discount#"))
                 {
+                    await _track.AddAsync("Pacotes Pesquisados", "Promoções");
                     await ShowDiscountInfo(account, message.From, cancellationToken);
                 }
                 else

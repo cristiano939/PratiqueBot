@@ -16,6 +16,7 @@ using Takenet.MessagingHub.Client.Extensions.Bucket;
 using PratiqueBot.Clients;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using Takenet.MessagingHub.Client.Extensions.EventTracker;
 
 namespace PratiqueBot.Receivers
 {
@@ -26,7 +27,7 @@ namespace PratiqueBot.Receivers
 
 
 
-        public SearchNearUnityReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
+        public SearchNearUnityReceiver(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track) : base(sender, directory, bucket, settings,track)
         {
          
             _gclient = new GMapsClient();
@@ -57,7 +58,7 @@ namespace PratiqueBot.Receivers
 
                 Gym gym = await SendNearestGym(lat, lng, _settings.Gyms);
 
-
+                await _track.AddAsync("Unidades Proximas", gym.Name);
                 List<CarrosselCard> cards = new List<CarrosselCard>();
                 cards.Add(
                     new CarrosselCard

@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Takenet.MessagingHub.Client.Extensions.Bucket;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Takenet.MessagingHub.Client.Extensions.EventTracker;
 
 namespace PratiqueBot.Receivers
 {
@@ -23,7 +24,7 @@ namespace PratiqueBot.Receivers
     {
 
 
-        public SportsReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings) : base(sender, directory, bucket, settings)
+        public SportsReceivers(IMessagingHubSender sender, IDirectoryExtension directory, IBucketExtension bucket, Settings settings, IEventTrackExtension track) : base(sender, directory, bucket, settings,track)
         {
          
         }
@@ -46,6 +47,7 @@ namespace PratiqueBot.Receivers
                 else
                 {
                     Modality modality = InputToModality(input);
+                    await _track.AddAsync("Modalidade Pesquisada", GetModalityName(modality));
                     string text = GetModalityText(modality);
                     await SendModalityText(text, message.From, cancellationToken);
                     cancellationToken.WaitHandle.WaitOne(new TimeSpan(0, 0, 3));
